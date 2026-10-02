@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kua-Noy 23</title>
+
+    <meta
+        name="description"
+        content="Kua-Noy 23 — ferramenta experimental de criptografia."
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #08090d;
+            color: #e8e8ee;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        header {
+            height: 70px;
+            border-bottom: 1px solid #20222c;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #ff4fcf;
+        }
+
+        .logo b {
+            color: #6c8cff;
+        }
+
+        .status {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #70ff9b;
+        }
+
+        main {
+            width: min(900px, 92%);
+            margin: auto;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 75px 0 45px;
+        }
+
+        .tag {
+            display: inline-block;
+
+            padding: 7px 13px;
+
+            border: 1px solid #303343;
+            border-radius: 20px;
+
+            color: #858aa3;
+
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            margin: 18px 0 10px;
+
+            font-size: clamp(42px, 8vw, 72px);
+            letter-spacing: -3px;
+        }
+
+        .hero h1 span {
+            color: #ff4fcf;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: auto;
+
+            color: #8d91a5;
+            line-height: 1.7;
+        }
+
+        .panel {
+            background: #101118;
+
+            border: 1px solid #242733;
+            border-radius: 16px;
+
+            padding: 25px;
+
+            box-shadow: 0 20px 70px #00000055;
+        }
+
+        .mode {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .mode button {
+            flex: 1;
+
+            padding: 13px;
+
+            border: 1px solid #292c39;
+            border-radius: 9px;
+
+            background: #151720;
+            color: #777c91;
+
+            cursor: pointer;
+            font-weight: bold;
+
+            transition: .2s;
+        }
+
+        .mode button:hover {
+            border-color: #555a70;
+        }
+
+        .mode button.active {
+            background: #20182a;
+            color: #ff63d4;
+
+            border-color: #673b61;
+        }
+
+        label {
+            display: block;
+
+            margin: 18px 0 8px;
+
+            color: #8d92a7;
+
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+
+            border: 1px solid #292c38;
+            border-radius: 10px;
+
+            outline: none;
+
+            background: #090a0f;
+            color: #f0f0f5;
+
+            font-family: Consolas, monospace;
+
+            transition: .2s;
+        }
+
+        textarea {
+            min-height: 170px;
+            padding: 15px;
+            resize: vertical;
+        }
+
+        input {
+            padding: 14px;
+        }
+
+        textarea:focus,
+        input:focus {
+            border-color: #8050ff;
+            box-shadow: 0 0 0 3px #8050ff15;
+        }
+
+        .run {
+            width: 100%;
+
+            margin: 22px 0;
+
+            padding: 16px;
+
+            border: 0;
+            border-radius: 10px;
+
+            background: linear-gradient(90deg, #7048ff, #e83ebc);
+
+            color: white;
+
+            font-weight: 900;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .run:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .outputBox {
+            position: relative;
+        }
+
+        .outputBox textarea {
+            min-height: 180px;
+
+            padding-right: 80px;
+
+            word-break: break-all;
+        }
+
+        #copy {
+            position: absolute;
+
+            right: 10px;
+            top: 10px;
+
+            padding: 8px 10px;
+
+            border: 1px solid #303342;
+            border-radius: 7px;
+
+            background: #181a23;
+            color: #aeb3c8;
+
+            cursor: pointer;
+        }
+
+        #copy:hover {
+            color: white;
+        }
+
+        /* A-ADS */
+
+        #frame {
+            margin: 35px auto !important;
+        }
+
+        .info {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+
+            margin: 45px 0;
+        }
+
+        .info > div {
+            padding: 22px;
+
+            background: #0e0f15;
+
+            border: 1px solid #20222c;
+            border-radius: 12px;
+        }
+
+        .info h2 {
+            font-size: 16px;
+        }
+
+        .info p {
+            color: #85899c;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        footer {
+            padding: 30px;
+
+            border-top: 1px solid #20222c;
+
+            text-align: center;
+
+            color: #5d6172;
+
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        #toast {
+            position: fixed;
+
+            bottom: 25px;
+            left: 50%;
+
+            transform: translateX(-50%) translateY(20px);
+
+            padding: 11px 18px;
+
+            background: #181a22;
+            border: 1px solid #343746;
+            border-radius: 8px;
+
+            opacity: 0;
+            pointer-events: none;
+
+            transition: .25s;
+
+            z-index: 999999;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 650px) {
+
+            header {
+                padding: 0 5%;
+            }
+
+            .hero {
+                padding-top: 55px;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <header>
+        
+        <!-- BEGIN AADS AD UNIT 2457103 -->
+
+        <div
+            id="frame"
+            style="width: 100%;margin: auto;position: relative; z-index: 99998;"
+        >
+
+            <iframe
+                data-aa="2457103"
+                src="//acceptable.a-ads.com/2457103/?size=Adaptive"
+                style="
+                    border:0;
+                    padding:0;
+                    width:70%;
+                    height:auto;
+                    overflow:hidden;
+                    display:block;
+                    margin:auto;
+                "
+            ></iframe>
+
+        </div>
+
+        <!-- END AADS AD UNIT 2457103 -->
+
+        <br><br>
+        <div class="logo">
+            KUA<span>-</span>NOY <b>23</b>
+        </div>
+
+        <div class="status">
+            ● LOCAL
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <section class="hero">
+
+            <div class="tag">
+                EXPERIMENTAL CRYPTOGRAPHY
+            </div>
+
+            <h1>
+                Kua-Noy <span>23</span>
+            </h1>
+
+            <p>
+                Transforme textos em números gigantes usando uma chave.
+                Todo o processamento acontece localmente no navegador.
+            </p>
+
+        </section>
+        
+        <!-- BEGIN AADS AD UNIT 2457103 -->
+
+        <div
+            id="frame"
+            style="width: 100%;margin: auto;position: relative; z-index: 99998;"
+        >
+
+            <iframe
+                data-aa="2457103"
+                src="//acceptable.a-ads.com/2457103/?size=Adaptive"
+                style="
+                    border:0;
+                    padding:0;
+                    width:70%;
+                    height:auto;
+                    overflow:hidden;
+                    display:block;
+                    margin:auto;
+                "
+            ></iframe>
+
+        </div>
+
+        <!-- END AADS AD UNIT 2457103 -->
+
+
+        <section class="panel">
+
+            <div class="mode">
+
+                <button id="encryptBtn" class="active">
+                    CRIPTOGRAFAR
+                </button>
+
+                <button id="decryptBtn">
+                    DESCRIPTOGRAFAR
+                </button>
+
+            </div>
+
+
+            <label id="inputLabel">
+                TEXTO
+            </label>
+
+            <textarea
+                id="input"
+                placeholder="Digite o texto que deseja criptografar..."
+                spellcheck="false"
+            ></textarea>
+
+
+            <label>
+                CHAVE
+            </label>
+
+            <input
+                id="key"
+                type="text"
+                placeholder="Digite sua chave..."
+                autocomplete="off"
+            >
+
+
+            <button id="run" class="run">
+                EXECUTAR KUA-NOY 23
+            </button>
+
+
+            <label>
+                RESULTADO
+            </label>
+
+            <div class="outputBox">
+
+                <textarea
+                    id="output"
+                    readonly
+                    placeholder="O resultado aparecerá aqui..."
+                    spellcheck="false"
+                ></textarea>
+
+                <button id="copy">
+                    COPIAR
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- BEGIN AADS AD UNIT 2457103 -->
+
+        <div
+            id="frame"
+            style="width: 100%;margin: auto;position: relative; z-index: 99998;"
+        >
+
+            <iframe
+                data-aa="2457103"
+                src="//acceptable.a-ads.com/2457103/?size=Adaptive"
+                style="
+                    border:0;
+                    padding:0;
+                    width:70%;
+                    height:auto;
+                    overflow:hidden;
+                    display:block;
+                    margin:auto;
+                "
+            ></iframe>
+
+        </div>
+
+        <!-- END AADS AD UNIT 2457103 -->
+
+
+        <section class="info">
+
+            <div>
+
+                <h2>
+                    O que é Kua-Noy 23?
+                </h2>
+
+                <p>
+                    Kua-Noy 23 é uma cifra experimental que transforma
+                    texto em um único número utilizando uma chave.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h2>
+                    Processamento local
+                </h2>
+
+                <p>
+                    O texto e a chave são processados diretamente no
+                    navegador. Nenhum servidor é necessário para executar
+                    a transformação.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        KUA-NOY 23 · Experimental Project
+    </footer>
+
+
+    <div id="toast"></div>
+
+
+    <script>
+
+        let mode = "encrypt"
+
+
+        const input =
+            document.getElementById("input")
+
+        const key =
+            document.getElementById("key")
+
+        const output =
+            document.getElementById("output")
+
+
+        const encryptBtn =
+            document.getElementById("encryptBtn")
+
+        const decryptBtn =
+            document.getElementById("decryptBtn")
+
+
+        const inputLabel =
+            document.getElementById("inputLabel")
+
+
+        const run =
+            document.getElementById("run")
+
+
+        const copy =
+            document.getElementById("copy")
+
+
+        const toast =
+            document.getElementById("toast")
+
+
+        /*
+         * ==========================
+         *      KUA-NOY 23
+         * ==========================
+         */
+
+
+        function kuaNoy23(texto, chave) {
+
+            const apelac =
+                new TextEncoder().encode(texto)
+
+
+            const cave =
+                new TextEncoder().encode(chave)
+
+
+            if (cave.length === 0)
+                throw new Error(
+                    "A chave não pode estar vazia."
+                )
+
+
+            let numero = 0n
+
+
+            for (
+                let i = 0;
+                i < apelac.length;
+                i++
+            ) {
+
+                let byte = apelac[i]
+
+
+                byte =
+                    (
+                        byte +
+                        cave[i % cave.length]
+                    ) % 256
+
+
+                numero =
+                    numero * 256n +
+                    BigInt(byte)
+            }
+
+
+            return numero
+        }
+
+
+        function kuaNoy23_decrypt(numero, chave) {
+
+            const cave =
+                new TextEncoder().encode(chave)
+
+
+            if (cave.length === 0)
+                throw new Error(
+                    "A chave não pode estar vazia."
+                )
+
+
+            const bytes = []
+
+
+            while (numero > 0n) {
+
+                const byte =
+                    Number(numero % 256n)
+
+
+                numero /= 256n
+
+
+                bytes.unshift(byte)
+            }
+
+
+            for (
+                let i = 0;
+                i < bytes.length;
+                i++
+            ) {
+
+                bytes[i] =
+                    (
+                        bytes[i] -
+                        cave[i % cave.length] +
+                        256
+                    ) % 256
+            }
+
+
+            return new TextDecoder().decode(
+                new Uint8Array(bytes)
+            )
+        }
+
+
+        /*
+         * ==========================
+         *          UI
+         * ==========================
+         */
+
+
+        function showToast(text) {
+
+            toast.textContent = text
+
+            toast.classList.add("show")
+
+
+            setTimeout(() => {
+
+                toast.classList.remove("show")
+
+            }, 1800)
+        }
+
+
+        encryptBtn.onclick = () => {
+
+            mode = "encrypt"
+
+
+            encryptBtn.classList.add("active")
+
+            decryptBtn.classList.remove("active")
+
+
+            inputLabel.textContent =
+                "TEXTO"
+
+
+            input.placeholder =
+                "Digite o texto que deseja criptografar..."
+        }
+
+
+        decryptBtn.onclick = () => {
+
+            mode = "decrypt"
+
+
+            decryptBtn.classList.add("active")
+
+            encryptBtn.classList.remove("active")
+
+
+            inputLabel.textContent =
+                "NÚMERO KUA-NOY"
+
+
+            input.placeholder =
+                "Cole o número Kua-Noy aqui..."
+        }
+
+
+        run.onclick = () => {
+
+            const valor =
+                input.value.trim()
+
+
+            const chave =
+                key.value
+
+
+            if (!valor) {
+
+                showToast(
+                    "Digite alguma coisa."
+                )
+
+                return
+            }
+
+
+            if (!chave) {
+
+                showToast(
+                    "Digite uma chave."
+                )
+
+                return
+            }
+
+
+            try {
+
+                if (mode === "encrypt") {
+
+                    const resultado =
+                        kuaNoy23(
+                            valor,
+                            chave
+                        )
+
+
+                    output.value =
+                        resultado.toString()
+
+                }
+
+
+                else {
+
+                    if (!/^\d+$/.test(valor)) {
+
+                        showToast(
+                            "O número contém caracteres inválidos."
+                        )
+
+                        return
+                    }
+
+
+                    output.value =
+                        kuaNoy23_decrypt(
+                            BigInt(valor),
+                            chave
+                        )
+                }
+
+
+                showToast(
+                    "Kua-Noy executada."
+                )
+
+            }
+
+
+            catch (erro) {
+
+                console.error(erro)
+
+                showToast(
+                    "Erro ao processar."
+                )
+            }
+        }
+
+
+        copy.onclick = async () => {
+
+            if (!output.value) {
+
+                showToast(
+                    "Nada para copiar."
+                )
+
+                return
+            }
+
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    output.value
+                )
+
+
+                showToast(
+                    "Copiado!"
+                )
+
+            }
+
+            catch {
+
+                showToast(
+                    "Não foi possível copiar."
+                )
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
